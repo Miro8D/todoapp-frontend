@@ -220,7 +220,7 @@ const TodoPage = () => {
                     {todo.image_url && (
                       <div className="rounded-lg overflow-hidden bg-muted">
                         <img
-                          src={`${process.env.NEXT_PUBLIC_API_URL || ''}/${todo.image_url}`}
+                          src={todo.image_url}
                           alt="Todo attachment"
                           className="w-full h-32 object-cover"
                         />
