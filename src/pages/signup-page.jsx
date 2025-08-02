@@ -1,13 +1,30 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { UserPlus, LogIn, Lock, User } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
 export default function SignupPage() {
     const navigate = useNavigate();
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token){
+          try {
+            const decoded = jwtDecode(token);
+            if (decoded.exp < Date.now() / 1000) {
+              localStorage.removeItem('token');
+              return;
+            } else navigate('/todo');
+          } catch (err) {
+            console.error('Failed to decode JWT:', err);
+            localStorage.removeItem('token');
+          }
+        } else return;
+  }, []);
+    
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
     const [isLoading, setIsLoading] = useState(false);
