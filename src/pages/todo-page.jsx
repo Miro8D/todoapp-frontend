@@ -71,16 +71,15 @@ export default function TodoPage() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!checkToken()) {
-            navigate('/login');
+            navigate('/');
         } else {
-            fetchApi(token, 'api/accounts/me')
-                .then(u => setUser(u))
-                .catch(err => {
-                    console.error('Failed to fetch user info:', err);
-                    navigate('/login');
-                });
+            try {
+              setUser(jwtDecode(token));
+            } catch (err) {
+              console.error(err)
+            }
 
-            fetchApi(token, 'api/todos/')
+            fetchApi(token, 'api/todos')
                 .then(todos => setTodos(todos))
                 .catch(err => console.error('Failed to fetch todos:', err));
         }
