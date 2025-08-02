@@ -315,7 +315,7 @@ export default function TodoPage() {
                                         {todo.image_url && (
                                             <div className="rounded-lg overflow-hidden bg-muted">
                                                 <img
-                                                    src={`http://localhost:8000/${todo.image_url}`}
+                                                    src={`${import.meta.env.VITE_API_URL}${todo.image_url}`}
                                                     alt="Todo attachment"
                                                     className="w-full h-32 object-cover"
                                                 />
