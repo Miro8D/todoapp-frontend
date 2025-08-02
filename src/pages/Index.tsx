@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogIn, UserPlus, CheckSquare, Layout, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const Index = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token){
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp < Date.now() / 1000) {
+          localStorage.removeItem('token');
+          return;
+        } else navigate('/todo');
+      } catch (err) {
+        console.error('Failed to decode JWT:', err);
+        localStorage.removeItem('token');
+      }
+    } else return;
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-board">
       {/* Hero Section */}
