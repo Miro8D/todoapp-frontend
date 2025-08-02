@@ -173,7 +173,7 @@ export default function TodoPage() {
                         <h1 className="text-3xl font-bold text-foreground mb-2">My Board</h1>
                         <div className="flex items-center gap-2">
                             <Badge variant="secondary" className="text-sm">
-                                Logged in as <span className="font-semibold">{user?.username}</span>
+                                Logged in as <span className="font-semibold"> {user?.username}</span>
                             </Badge>
                         </div>
                     </div>
