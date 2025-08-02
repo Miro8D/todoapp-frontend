@@ -115,15 +115,20 @@ export default function TodoPage() {
     };
 
     const handleDelete = async (id) => {
-        const token = localStorage.getItem('token');
+        if (!checkToken()) logout();
         try {
-            await fetchApi(token, `api/todos/${id}`, { method: 'DELETE' });
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/todos/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+            });
             setTodos(todos.filter(todo => todo.id !== id));
         } catch (err) {
             console.error('Failed to delete todo:', err);
         }
     };
-
     const setChange = (todo) => {
         setChangeId(todo.id);
         setChangeTitle(todo.title);
@@ -139,7 +144,7 @@ export default function TodoPage() {
             if (changeImage) formData.append('image', changeImage);
 
             await fetchApi(token, `api/todos/${changeId}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 body: formData,
                 headers: {} // Let browser set content-type for FormData
             });
