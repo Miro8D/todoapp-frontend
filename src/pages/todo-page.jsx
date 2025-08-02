@@ -117,7 +117,7 @@ export default function TodoPage() {
     const handleDelete = async (id) => {
         if (!checkToken()) logout();
         try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/todos/${id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/todos/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
