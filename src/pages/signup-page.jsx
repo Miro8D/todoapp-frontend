@@ -18,7 +18,7 @@ export default function SignupPage() {
         setError('');
         
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/accounts/signup`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
