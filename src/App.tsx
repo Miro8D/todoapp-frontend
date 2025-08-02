@@ -4,9 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
-import LoginPage from "./pages/login-page";
-import SignupPage from "./pages/signup-page";
-import TodoPage from "./pages/todo-page";
+import LoginPage from "./pages/login-page.jsx";
+import SignupPage from "./pages/signup-page.jsx";
+import TodoPage from "./pages/todo-page.jsx";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
