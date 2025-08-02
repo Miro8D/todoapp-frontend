@@ -41,7 +41,7 @@ export default function TodoPage() {
             uri = uri.substring(1);
         }
 
-        const response = await fetch(`http://localhost:8000/${uri}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uri}`, {
             ...options,
             headers: {
                 'Authorization': `Bearer ${token}`,
