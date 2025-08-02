@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { LogIn, UserPlus, Lock, User } from 'lucide-react';
+import { useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -13,6 +15,22 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token){
+          try {
+            const decoded = jwtDecode(token);
+            if (decoded.exp < Date.now() / 1000) {
+              localStorage.removeItem('token');
+              return;
+            } else navigate('/todo');
+          } catch (err) {
+            console.error('Failed to decode JWT:', err);
+            localStorage.removeItem('token');
+          }
+        } else return;
+  }, []);
+    
     const handleLogin = async (username, password) => {
         setIsLoading(true);
         setError('');
