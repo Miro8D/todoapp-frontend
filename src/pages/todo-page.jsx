@@ -41,7 +41,7 @@ export default function TodoPage() {
             uri = uri.substring(1);
         }
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uri}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/${uri}`, {
             ...options,
             headers: {
                 'Authorization': `Bearer ${token}`,
