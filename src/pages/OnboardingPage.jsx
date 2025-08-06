@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,6 +25,12 @@ export default function OnboardingPage() {
     const [country, setCountry] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (!username || !password) {
+            navigate('/signup');
+        }
+    }, [username, password, navigate]);
 
     const handleComplete = async () => {
         if (!firstName.trim() || !lastName.trim()) {
@@ -67,8 +73,11 @@ export default function OnboardingPage() {
     };
 
     if (!username || !password) {
-        navigate('/signup');
-        return null;
+        return (
+            <div className="min-h-screen bg-gradient-board flex items-center justify-center p-6">
+                <div className="text-center text-muted-foreground">Redirecting...</div>
+            </div>
+        );
     }
 
     return (
