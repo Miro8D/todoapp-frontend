@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Plus, X, Edit3, LogOut, Image as ImageIcon, Save, XCircle } from 'lucide-react';
+import { Plus, X, Edit3, LogOut, Image as ImageIcon, Save, XCircle, User } from 'lucide-react';
 
 function checkToken() {
   const token = localStorage.getItem('token')
@@ -183,10 +183,16 @@ export default function TodoPage() {
                             </Badge>
                         </div>
                     </div>
-                    <Button variant="outline" onClick={logout} className="gap-2">
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" onClick={() => navigate('/profile')} className="gap-2">
+                            <User className="w-4 h-4" />
+                            Profile
+                        </Button>
+                        <Button variant="outline" onClick={logout} className="gap-2">
+                            <LogOut className="w-4 h-4" />
+                            Logout
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Add New Todo Card */}

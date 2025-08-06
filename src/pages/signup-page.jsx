@@ -30,37 +30,24 @@ export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const handleSignup = async (username, password) => {
-        setIsLoading(true);
-        setError('');
-        
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.text();
-                throw new Error(errorData || 'Signup failed');
-            }
-
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            navigate('/todo');
-        } catch (err) {
-            setError(err.message || 'Signup failed. Please try again.');
-        } finally {
-            setIsLoading(false);
+    const handleSignup = (username, password) => {
+        if (!username.trim() || !password.trim()) {
+            setError('Username and password are required');
+            return;
         }
+        
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            return;
+        }
+
+        // Navigate to onboarding with username and password
+        navigate('/onboarding', { state: { username, password } });
     };
 
     return (
         <div className="min-h-screen bg-gradient-board flex items-center justify-center p-6">
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md mx-auto">
                 <Card className="shadow-card hover:shadow-card-hover transition-all duration-200">
                     <CardHeader className="text-center pb-6">
                         <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
