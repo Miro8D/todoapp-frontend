@@ -30,7 +30,7 @@ export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const handleSignup = (username, password) => {
+    const handleSignup = async (username, password) => {
         if (!username.trim() || !password.trim()) {
             setError('Username and password are required');
             return;
@@ -41,8 +41,27 @@ export default function SignupPage() {
             return;
         }
 
-        // Navigate to onboarding with username and password
-        navigate('/onboarding', { state: { username, password } });
+        try{
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/signup`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ username, password }),
+            });
+            if (!response.ok) {
+                    const errorData = await response.text();
+                    throw new Error(errorData || 'Signup failed');
+            }
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            navigate('/onboarding' , { state: { username } });
+        } catch (err) {
+            setError(err.message || 'Signup failed. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
