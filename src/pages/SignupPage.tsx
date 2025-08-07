@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,12 +8,50 @@ import { UserPlus, User, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignup = (username: string, password: string) => {
-    // Handle signup logic here
-    console.log('Signup:', { username, password });
+  const handleSignup = async (username: string, password: string) => {
+    if (!username.trim() || !password.trim()) {
+      setError('Username and password are required');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // First, check if username is available
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts/check-username`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || 'Username check failed');
+      }
+
+      // If username is available, navigate to onboarding with credentials
+      navigate('/onboarding', { 
+        state: { username, password }
+      });
+    } catch (err) {
+      setError(err.message || 'Failed to validate username. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -32,6 +71,11 @@ const SignupPage = () => {
             <p className="text-muted-foreground">Join us to start organizing your tasks</p>
           </CardHeader>
           <CardContent className="space-y-6">
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-sm font-medium">
@@ -69,9 +113,18 @@ const SignupPage = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full gap-2">
-                <UserPlus className="w-4 h-4" />
-                Create Account
+              <Button type="submit" className="w-full gap-2" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                    Checking...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-4 h-4" />
+                    Create Account
+                  </>
+                )}
               </Button>
             </form>
 
