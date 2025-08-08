@@ -66,7 +66,7 @@ export default function SignupPage() {
 
     return (
         <div className="min-h-screen bg-gradient-board flex items-center justify-center p-6">
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-sm mx-auto">
                 <Card className="shadow-card hover:shadow-card-hover transition-all duration-200">
                     <CardHeader className="text-center pb-6">
                         <div className="mx-auto w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
